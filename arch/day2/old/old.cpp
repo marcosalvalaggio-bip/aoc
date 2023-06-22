@@ -5,17 +5,18 @@
 #include <numeric>
 #include <algorithm>
 
-int strategy_score(const std::string& file_name, bool verbose) {
+
+int main() {
+
     // open the input.txt or simple.txt
-    std::ifstream inputFile(file_name);
+    std::ifstream inputFile("simple.txt");
 
     if (inputFile.is_open()) {
-            std::vector<std::string> lines; // file lines
-            std::vector<char> fcs; // opponent strategy
-            std::vector<char> lcs; // your strategy
-            std::string line; // single line readed
-
-        // read lines from the input file
+        std::vector<std::string> lines;
+        std::vector<char> fcs;
+        std::vector<char> lcs;
+        std::string line;
+        
         while (std::getline(inputFile, line)) {
             lines.push_back(line);
             char fc = line[0];
@@ -29,15 +30,27 @@ int strategy_score(const std::string& file_name, bool verbose) {
         std::vector<int> range(lines.size());
         std::iota(range.begin(), range.end(), 0);
 
-        std::vector<int> results;
+        // print the lines readed 
+        for (const std::string& ln: lines) {
+            std::cout << ln << std::endl;
+            // char fc = ln[0];
+            // std::cout << fc << std::endl;
+        }
 
+        // for (char c: fcs) {
+        //     std::cout << c << std::endl;
+        // } 
+
+        // for (char c: lcs) {
+        //     std::cout << c << std::endl;
+        // } 
+
+        std::vector<int> results;
         for (int i: range) {
             int match = 0; 
             int bonus = 0;
             int res = 0;
-            if (verbose == true) {
-                std::cout << fcs[i] << lcs[i] << std::endl; 
-            }
+            std::cout << fcs[i] << lcs[i] << std::endl; 
             if (fcs[i] == 'A' && lcs[i] == 'Z') {
                 match = 0; // lost rock > scissor
                 bonus = 3;
@@ -84,25 +97,21 @@ int strategy_score(const std::string& file_name, bool verbose) {
                 res = match + bonus;
                 results.push_back(res); 
             }
-            if (verbose == true) {
-                std::cout << res << std::endl;
-            }
+            std::cout << res << std::endl;
+            // bool status = fcs[i] == 'A';
+            // std::cout << status << std::endl;
         }
 
         int score = std::accumulate(results.begin(), results.end(), 0);
-        return score;
+        std::cout << "Final score: " << score << std::endl;
+
+
 
     } else {
-        return 0;
+        std::cout << "Failed to open the file." << std::endl;
     }
-}
 
 
-int main() {
-
-    int score;
-    score = strategy_score("input.txt", false);
-    std::cout << score << std::endl;
     return 0;
 
 }
